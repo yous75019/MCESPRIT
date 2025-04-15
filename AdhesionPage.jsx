@@ -6,7 +6,7 @@ export default function AdhesionPage() {
       <div className="text-center space-y-2">
         <h1 className="text-3xl font-bold">Système d’adhésion</h1>
         <p className="text-gray-600 text-lg">
-          Une adhésion adaptée à tous les profils pour soutenir notre association moto.
+          Une adhésion adaptée à tous les profils pour soutenir MC ESPRIT.
         </p>
       </div>
 
