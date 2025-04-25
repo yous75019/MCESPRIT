@@ -12,13 +12,18 @@ export default function AdhesionPage() {
 
   return (
     <div className="p-6 max-w-6xl mx-auto space-y-10">
+      {/* Introduction */}
       <div className="text-center space-y-2">
         <h1 className="text-3xl font-bold">Système d’adhésion</h1>
         <p className="text-muted-foreground text-lg">
-          Une adhésion adaptée à tous les profils pour soutenir notre association moto.
+          Nous avons souhaité proposer un système d’adhésion simple, équitable et transparent. Le but est de permettre à tous les profils de nous rejoindre, tout en contribuant au développement de notre association.
+        </p>
+        <p className="text-muted-foreground text-sm">
+          Le tarif varie selon l’âge ou le statut (mineur, étudiant, adulte salarié), mais aussi selon le niveau d’implication ou les avantages souhaités. Certaines formules donnent accès à des réductions chez nos partenaires, à un pack de bienvenue (t-shirt, stickers, etc.), ou à des événements réservés aux membres.
         </p>
       </div>
 
+      {/* Variantes d'adhésion */}
       <Tabs defaultValue="variante1" className="w-full">
         <TabsList className="grid grid-cols-3 w-full">
           <TabsTrigger value="variante1">Variante 1</TabsTrigger>
@@ -104,4 +109,3 @@ export default function AdhesionPage() {
     </div>
   );
 }
-
