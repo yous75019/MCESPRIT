@@ -5,9 +5,51 @@ import { Button } from "../components/ui/button";
 
 export default function AdhesionPage() {
   const [votes, setVotes] = useState({ variante1: 0, variante2: 0, variante3: 0 });
+  const [formData, setFormData] = useState({ prenom: "", nom: "" });
+  const [confirmation, setConfirmation] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleVote = (variant) => {
-    setVotes((prev) => ({ ...prev, [variant]: prev[variant] + 1 }));
+  const handleVote = async (variant) => {
+    if (!formData.prenom || !formData.nom) {
+      alert("Merci de remplir votre prénom et votre nom !");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const airtableApiKey = "patsaQJCJBGys1ann.3b52a69fc3a83049f4d1e345e904783fd06d1f9bd343040f2339b3853bdf3828";
+      const airtableBaseId = "app6pIY8Zmrn0nCE1";
+      const tableName = "Votes tableau adhésion MC ESPRIT BIKER";
+
+      const response = await fetch(`https://api.airtable.com/v0/${airtableBaseId}/${tableName}`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${airtableApiKey}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          fields: {
+            Prenom: formData.prenom,
+            Nom: formData.nom,
+            Variante: variant,
+          },
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Erreur lors de l'envoi vers Airtable");
+      }
+
+      setVotes((prev) => ({ ...prev, [variant]: prev[variant] + 1 }));
+      setConfirmation(`Merci ${formData.prenom} pour ton vote (${variant}) !`);
+      setFormData({ prenom: "", nom: "" });
+    } catch (error) {
+      console.error(error);
+      alert("Erreur lors de l'envoi du vote.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -19,8 +61,28 @@ export default function AdhesionPage() {
           Nous avons souhaité proposer un système d’adhésion simple, équitable et transparent. Le but est de permettre à tous les profils de nous rejoindre, tout en contribuant au développement de notre association.
         </p>
         <p className="text-muted-foreground text-sm">
-          Le tarif varie selon l’âge ou le statut (mineur, étudiant, adulte salarié), mais aussi selon le niveau d’implication ou les avantages souhaités. Certaines formules donnent accès à des réductions chez nos partenaires, à un pack de bienvenue (t-shirt, stickers, etc.), ou à des événements réservés aux membres.
+          Le tarif varie selon l’âge ou le statut (mineur, étudiant, adulte salarié), mais aussi selon le niveau d’implication ou les avantages souhaités.
         </p>
+      </div>
+
+      {/* Formulaire */}
+      <div className="flex flex-col items-center gap-4">
+        <input
+          type="text"
+          placeholder="Prénom"
+          value={formData.prenom}
+          onChange={(e) => setFormData({ ...formData, prenom: e.target.value })}
+          className="border p-2 rounded w-full max-w-sm"
+          required
+        />
+        <input
+          type="text"
+          placeholder="Nom"
+          value={formData.nom}
+          onChange={(e) => setFormData({ ...formData, nom: e.target.value })}
+          className="border p-2 rounded w-full max-w-sm"
+          required
+        />
       </div>
 
       {/* Variantes d'adhésion */}
@@ -46,11 +108,13 @@ export default function AdhesionPage() {
                 <div>Étudiant</div><div>15 €</div><div>30 €</div><div>50 €</div><div>✅</div>
                 <div>Adulte (salarié)</div><div>25 €</div><div>50 €</div><div>80 €</div><div>✅</div>
               </div>
-              <div className="text-sm text-muted-foreground mt-4">
-                <p><strong>Avantages :</strong> Valorise fortement l'adhésion Premium, simple à gérer.</p>
-                <p><strong>Inconvénients :</strong> Peut décourager ceux qui voudraient un pack en formule Privilège.</p>
-              </div>
-              <Button className="mt-4" onClick={() => handleVote('variante1')}>Je préfère cette option</Button>
+              <Button
+                className="mt-4"
+                onClick={() => handleVote('Variante 1')}
+                disabled={loading}
+              >
+                {loading ? "Envoi en cours..." : "Je préfère cette option"}
+              </Button>
               <p className="text-sm text-muted-foreground mt-2">Votes : {votes.variante1}</p>
             </CardContent>
           </Card>
@@ -71,11 +135,13 @@ export default function AdhesionPage() {
                 <div>Étudiant</div><div>15 €</div><div>40 €</div><div>55 €</div><div>✅</div>
                 <div>Adulte (salarié)</div><div>25 €</div><div>60 €</div><div>85 €</div><div>✅</div>
               </div>
-              <div className="text-sm text-muted-foreground mt-4">
-                <p><strong>Avantages :</strong> Rend la formule Privilège plus attractive, incite à prendre au moins le niveau moyen.</p>
-                <p><strong>Inconvénients :</strong> Coût logistique plus important si beaucoup de membres Privilège.</p>
-              </div>
-              <Button className="mt-4" onClick={() => handleVote('variante2')}>Je préfère cette option</Button>
+              <Button
+                className="mt-4"
+                onClick={() => handleVote('Variante 2')}
+                disabled={loading}
+              >
+                {loading ? "Envoi en cours..." : "Je préfère cette option"}
+              </Button>
               <p className="text-sm text-muted-foreground mt-2">Votes : {votes.variante2}</p>
             </CardContent>
           </Card>
@@ -96,16 +162,23 @@ export default function AdhesionPage() {
                 <div>Étudiant</div><div>15 €</div><div>30 €</div><div>45 €</div><div>✅</div>
                 <div>Adulte (salarié)</div><div>25 €</div><div>50 €</div><div>75 €</div><div>✅</div>
               </div>
-              <div className="text-sm text-muted-foreground mt-4">
-                <p><strong>Avantages :</strong> Très flexible, chacun décide s'il veut payer pour le pack.</p>
-                <p><strong>Inconvénients :</strong> Logistique légèrement plus complexe pour gérer qui a payé le pack ou non.</p>
-              </div>
-              <Button className="mt-4" onClick={() => handleVote('variante3')}>Je préfère cette option</Button>
+              <Button
+                className="mt-4"
+                onClick={() => handleVote('Variante 3')}
+                disabled={loading}
+              >
+                {loading ? "Envoi en cours..." : "Je préfère cette option"}
+              </Button>
               <p className="text-sm text-muted-foreground mt-2">Votes : {votes.variante3}</p>
             </CardContent>
           </Card>
         </TabsContent>
       </Tabs>
+
+      {/* Confirmation */}
+      {confirmation && (
+        <div className="text-center text-green-600 font-semibold mt-6">{confirmation}</div>
+      )}
     </div>
   );
 }
