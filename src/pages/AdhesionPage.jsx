@@ -20,7 +20,7 @@ export default function AdhesionPage() {
     try {
       const airtableApiKey = "patsaQJCJBGys1ann.3b52a69fc3a83049f4d1e345e904783fd06d1f9bd343040f2339b3853bdf3828";
       const airtableBaseId = "app6pIY8Zmrn0nCE1";
-      const tableName = "Votes tableau adhésion MC ESPRIT BIKER";
+      const tableName = "Votes";
 
       const response = await fetch(`https://api.airtable.com/v0/${airtableBaseId}/${tableName}`, {
         method: "POST",
