@@ -18,7 +18,7 @@ export default function AdhesionPage() {
     setLoading(true);
 
     try {
-      const airtableApiKey = "patsaQJCJBGys1ann.3b52a69fc3a83049f4d1e345e904783fd06d1f9bd343040f2339b3853bdf3828";
+      const airtableApiKey = "patsaQJCJBGys1ann.ec472b3fb1a30cb4608762d36f1c65bceb7a027ec4cd15ef9f6a0b7465d60923";
       const airtableBaseId = "app6pIY8Zmrn0nCE1";
       const tableName = "Votes";
 
